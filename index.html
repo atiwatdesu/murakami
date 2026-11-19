@@ -1,0 +1,922 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Murakami Ramen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Serif+Thai:wght@500;700&family=Noto+Sans+Thai:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap">
+<style>
+/* Layout: one long dark page (hero, story, menu, visit). Floating cart bar, bottom sheet, status overlay, hidden admin overlay. */
+:root{--ink:#0f0d0d;--coal:#181414;--line:#2b2424;--line2:#4a3d3d;--paper:#eee5da;--mute:#a0958c;--red:#c4232c;--red-hi:#e04650;--glow:rgba(196,35,44,.38);
+--display:'Shippori Mincho','Noto Serif Thai','Noto Serif JP',serif;--body:'Noto Sans Thai','Noto Sans JP',system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--paper);font-family:var(--body);font-size:15px;line-height:1.65;padding-block:0 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--ink);z-index:60}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--red-hi);outline-offset:3px}
+.wrap{max-width:1080px;margin:0 auto}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(15,13,13,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:14px}
+.seal{width:30px;height:30px;border:1.5px solid var(--red-hi);display:grid;place-items:center;font-family:var(--display);font-size:15px;color:var(--red-hi);transform:rotate(-4deg)}
+.lang{display:flex;border:1px solid var(--line2)}
+.lang button{padding:4px 11px;font-size:12px;letter-spacing:.08em;color:var(--mute)}
+.lang button[aria-pressed="true"]{background:var(--red);color:#fff}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:32px;align-items:center;padding-block:48px 56px}
+.eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--red-hi);display:flex;align-items:center;gap:12px}
+.eyebrow::after{content:"";height:1px;width:56px;background:var(--red)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,7vw,76px);line-height:1.05;letter-spacing:.02em;margin:16px 0 8px;text-wrap:balance}
+.jp-mark{font-family:var(--display);font-size:clamp(18px,2.6vw,26px);letter-spacing:.5em;color:var(--mute)}
+.lead{color:var(--mute);max-width:46ch;margin:20px 0 28px;font-weight:300;font-size:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{background:var(--red);color:#fff;padding:12px 26px;letter-spacing:.06em;font-weight:600;transition:background .2s,box-shadow .2s}
+.btn:hover{background:var(--red-hi);box-shadow:0 0 28px var(--glow)}
+.btn.ghost{background:none;border:1px solid var(--line2);color:var(--paper)}
+.btn.ghost:hover{border-color:var(--red-hi);box-shadow:none;background:none}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);padding:6px 14px;font-size:13px;color:var(--mute)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mute)}
+.pill.on .dot{background:#5fbf7a;box-shadow:0 0 10px #5fbf7a}
+.hero-art{position:relative;aspect-ratio:1/1.05;max-width:460px;width:100%;justify-self:center}
+.hero-art::before{content:"";position:absolute;inset:8% 6% 2%;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 68%)}
+.hero-art svg{position:relative;width:100%;height:100%}
+.sec{padding-block:56px;border-top:1px solid var(--line)}
+.label{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--red-hi)}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,4vw,40px);letter-spacing:.04em;margin:8px 0 24px;text-wrap:balance}
+.story{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.story p{margin:0 0 14px;color:var(--mute);font-weight:300;max-width:60ch;font-size:16px}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{text-align:left;background:var(--coal);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:8px;min-width:0;position:relative;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--red);transform:translateY(-3px)}
+.card svg{width:100%;max-width:170px;height:auto;align-self:center;margin-bottom:6px}
+.card .jp{font-family:var(--display);font-size:30px;color:var(--red-hi);line-height:1.1}
+.card .nm{font-weight:600;letter-spacing:.04em}
+.card .ds{color:var(--mute);font-size:14px;font-weight:300;flex:1}
+.card .pr{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:12px;margin-top:6px;font-variant-numeric:tabular-nums}
+.card .pr b{font-family:var(--display);font-size:22px}
+.card .add{font-size:13px;color:var(--red-hi);letter-spacing:.08em}
+.tag{position:absolute;top:0;right:0;background:var(--red);color:#fff;font-size:11px;letter-spacing:.18em;padding:3px 10px}
+.note{color:var(--mute);font-size:13px;margin-top:16px}
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.box{border:1px solid var(--line);padding:24px;background:var(--coal);min-width:0}
+.box h3{font-family:var(--display);margin:0 0 10px;font-size:20px;letter-spacing:.06em}
+.box p{margin:0 0 6px;color:var(--mute);overflow-wrap:anywhere}
+.box .big{font-family:var(--display);font-size:26px;color:var(--paper);font-variant-numeric:tabular-nums}
+.foot{padding-block:40px;border-top:1px solid var(--line);color:var(--mute);font-size:12px;letter-spacing:.14em;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.foot .logo{user-select:none;-webkit-user-select:none;touch-action:manipulation}
+/* cart bar */
+.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:64;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:linear-gradient(transparent,var(--ink) 40%)}
+.cartbar .inner{max-width:560px;margin:0 auto;display:flex;gap:10px}
+.cartbar button{flex:1;display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--red);color:#fff;font-weight:600;box-shadow:0 8px 30px var(--glow)}
+.cartbar .mine{flex:0 0 auto;background:var(--coal);border:1px solid var(--red);box-shadow:none}
+.cartbar .bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.04)}}
+/* sheet */
+.scrim{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.72);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--coal);border-top:2px solid var(--red);width:100%;max-width:520px;max-height:92dvh;overflow:auto;padding:24px max(20px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));animation:up .28s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+@media(min-width:700px){.scrim{align-items:center;padding:20px}.sheet{border:1px solid var(--line2);border-top:2px solid var(--red)}}
+.sheet h3{font-family:var(--display);font-size:26px;margin:0 0 4px}
+.sheet .sub{color:var(--mute);margin:0 0 18px;font-size:14px}
+.fld{display:block;margin:16px 0 6px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+input,textarea,select{width:100%;background:var(--ink);border:1px solid var(--line2);color:var(--paper);padding:10px 12px;font:inherit;border-radius:0}
+textarea{resize:vertical;min-height:64px}
+.qty{display:flex;align-items:center;gap:0;width:max-content;border:1px solid var(--line2)}
+.qty button{width:44px;height:44px;font-size:22px}
+.qty output{min-width:48px;text-align:center;font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1px solid var(--line2);padding:5px 12px;font-size:13px;color:var(--mute)}
+.chip[aria-pressed="true"]{border-color:var(--red-hi);color:var(--paper);background:rgba(196,35,44,.22)}
+.sheet .btn{width:100%;margin-top:22px;display:flex;justify-content:space-between}
+.lines{list-style:none;margin:0;padding:0}
+.lines li{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.lines .n{font-weight:600}.lines .m{grid-column:1;color:var(--mute);font-size:13px;overflow-wrap:anywhere}
+.lines .p{font-variant-numeric:tabular-nums;text-align:right}
+.lines .x{grid-column:2;text-align:right;font-size:12px;color:var(--red-hi)}
+.sum{display:flex;justify-content:space-between;font-family:var(--display);font-size:22px;padding-top:14px;font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--paper);color:var(--ink);padding:10px 20px;z-index:90;font-weight:600;animation:up .25s}
+/* overlays */
+.over{position:fixed;inset:0;z-index:80;background:var(--ink);overflow:auto;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(32px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.over .wrap{max-width:860px}
+.over header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
+.over h2{margin:0}
+.ord{background:var(--coal);border:1px solid var(--line);padding:22px;margin-bottom:18px;min-width:0}
+.ord .hd{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;margin-bottom:6px}
+.ord .no{font-family:var(--display);font-size:24px}
+.now{font-family:var(--display);font-size:clamp(22px,4vw,30px);color:var(--red-hi);margin:14px 0 2px}
+.now-d{color:var(--mute);margin:0 0 22px}
+.track{position:relative;display:grid;grid-template-columns:repeat(5,1fr);margin-bottom:8px}
+.track::before,.track .fill{content:"";position:absolute;top:19px;left:10%;height:2px;background:var(--line2)}
+.track::before{right:10%}
+.track .fill{background:var(--red-hi);box-shadow:0 0 12px var(--red);width:calc(80% * var(--p));transition:width 1.1s cubic-bezier(.6,.1,.2,1)}
+.stp{position:relative;text-align:center;font-size:12px;color:var(--mute);padding:0 2px;min-width:0}
+.stp i{display:grid;place-items:center;width:40px;height:40px;margin:0 auto 8px;border:1.5px solid var(--line2);border-radius:50%;background:var(--ink);transition:all .5s}
+.stp svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round}
+.stp.done{color:var(--paper)}.stp.done i{border-color:var(--red-hi);background:var(--red);color:#fff;transition-delay:.7s}
+.stp.cur{color:var(--paper)}.stp.cur i{border-color:var(--red-hi);color:var(--red-hi);animation:pulse 1.8s infinite;transition-delay:.7s}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--glow)}70%{box-shadow:0 0 0 14px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@media(max-width:620px){
+.hero,.story,.visit{grid-template-columns:1fr}
+.hero{padding-block:28px 40px}.hero-art{order:-1;max-width:300px}
+.track{grid-template-columns:1fr;gap:18px;padding-left:4px}
+.track::before,.track .fill{top:20px;left:23px;width:2px;height:calc(100% - 40px);right:auto}
+.track .fill{height:calc((100% - 40px)*var(--p));width:2px;transition:height 1.1s cubic-bezier(.6,.1,.2,1)}
+.stp{display:flex;align-items:center;gap:14px;text-align:left;font-size:14px}
+.stp i{margin:0}}
+/* admin */
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tabs button{padding:8px 18px;border:1px solid var(--line2);color:var(--mute)}
+.tabs button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.a-ord{border:1px solid var(--line);background:var(--coal);padding:18px;margin-bottom:14px}
+.a-ord.new{border-color:var(--red-hi);box-shadow:0 0 22px var(--glow)}
+.a-hd{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.a-tb{font-family:var(--display);font-size:28px}
+.a-st{font-size:13px;letter-spacing:.1em;color:var(--red-hi)}
+.a-it{margin:10px 0;padding:0;list-style:none}
+.a-it li{padding:6px 0;border-bottom:1px dashed var(--line)}
+.a-it small{display:block;color:var(--mute)}
+.a-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.a-act .btn{flex:1 1 180px;padding:16px}
+.a-act .ghost{flex:0 0 auto;padding:16px 18px}
+.demo{font-size:11px;border:1px solid var(--line2);color:var(--mute);padding:1px 8px;letter-spacing:.1em}
+.login{max-width:360px;margin:12vh auto 0}
+.err{color:var(--red-hi);min-height:22px;margin:8px 0 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+.steam path{stroke-dasharray:6 7;animation:flow 4s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-52}}
+
+.menu.show{grid-template-columns:repeat(4,1fr)}
+.card.static{cursor:default}.card.static:hover{transform:none;border-color:var(--line)}
+@media(max-width:899px){.menu.show{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.menu.show{gap:10px}.show .card{padding:14px 12px}.show .card .nm{font-size:15px}.show .card .ds{font-size:13px;line-height:1.5}}
+.cta-row{margin-top:28px;display:flex;justify-content:center}
+.ordv{position:fixed;inset:0;z-index:62;background:var(--ink);overflow:auto;padding:max(14px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 120px max(16px,env(safe-area-inset-left,0px))}
+.ordv .wrap{max-width:900px}
+.ordv header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.ordv h2{margin:0 0 4px}
+.omenu{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+@media(min-width:700px){.omenu{grid-template-columns:1fr 1fr}}
+.ocard{display:grid;grid-template-columns:92px 1fr;gap:2px 16px;align-items:center;text-align:left;background:var(--coal);border:1px solid var(--line);padding:14px;min-width:0;position:relative;transition:border-color .2s}
+.ocard:hover{border-color:var(--red)}
+.ocard svg{grid-row:1/4;width:92px;height:auto}
+.ocard .nm{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.2}
+.ocard .ds{color:var(--mute);font-size:13px;font-weight:300;line-height:1.5}
+.ocard .pr{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;font-variant-numeric:tabular-nums}
+.ocard .pr b{font-family:var(--display);font-size:20px}
+.ocard .add{font-size:13px;color:var(--red-hi);letter-spacing:.06em}
+.ocard .tag{font-size:10px;padding:2px 8px}
+.cats{display:flex;gap:8px;overflow-x:auto;margin:18px 0 4px;padding-bottom:4px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cats button{flex:0 0 auto;padding:9px 20px;border:1px solid var(--line2);color:var(--mute);white-space:nowrap}
+.cats button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.callbox{margin-top:20px;border:1px solid var(--line);background:var(--coal);padding:24px;max-width:520px}
+.callbox .btn{width:100%;padding:18px;font-size:17px}
+.qrbox{background:#fff;padding:14px;width:max-content;max-width:100%;margin:14px 0}
+.qrbox img,.qrbox canvas{display:block}
+@media(max-width:620px){.hero-art{max-width:260px}.hero .row .btn{flex:1 1 140px;text-align:center}}
+.ocard.out{opacity:.4}.ocard.out .add{color:var(--mute)}
+.floor{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin:6px 0 14px}
+.tb{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:96px;padding:12px 6px;border:2px solid;font-variant-numeric:tabular-nums}
+.tb b{font-family:var(--display);font-size:30px;line-height:1}.tb span{font-size:12px}
+.tb.off{border-color:var(--red);background:rgba(196,35,44,.1);color:var(--paper)}
+.tb.on{border-color:#5fbf7a;background:rgba(95,191,122,.14);color:var(--paper)}
+.tb .bd{position:absolute;top:-9px;left:0;right:0;display:flex;justify-content:center;gap:3px;flex-wrap:wrap}
+.tb .bd i{font-style:normal;font-size:11px;font-weight:700;padding:1px 6px;background:var(--paper);color:var(--ink)}
+.tb .bd .b2{background:#e8b84a}.tb .bd .b3{background:var(--red-hi);color:#fff}
+.mh{font-family:var(--display);font-size:20px;margin:20px 0 8px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.mi{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:16px 14px;border:2px solid;text-align:left}
+.mi.in{border-color:#5fbf7a;background:rgba(95,191,122,.14)}.mi.out{border-color:var(--red);background:rgba(196,35,44,.14)}
+.mi .st{font-weight:700;font-size:13px}.mi.in .st{color:#7fd896}.mi.out .st{color:var(--red-hi)}
+.sm{padding:4px 10px;border:1px solid var(--line2);color:var(--paper);font-size:12px;margin-left:4px}
+#tblPanel{z-index:85}#tblSheet .btn{width:auto;margin-top:0;display:inline-block}
+#sumOver{z-index:82}#imgOver{z-index:95}
+</style>
+<header class="top"><div class="wrap">
+  <div class="logo"><span class="seal">村</span><span>Murakami Ramen</span></div>
+  <div class="lang" role="group" aria-label="Language">
+    <button data-l="th" aria-pressed="true">TH</button><button data-l="en" aria-pressed="false">EN</button><button data-l="jp" aria-pressed="false">JP</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow" data-t="eyebrow"></div>
+      <h1>Murakami<br>Ramen</h1>
+      <div class="jp-mark">村上ラーメン</div>
+      <p class="lead" data-t="lead"></p>
+      <div class="row">
+        <button class="btn openOrder" data-t="orderNow"></button><button class="btn ghost" id="seeMenu" data-t="seeMenu"></button>
+        <span class="pill" id="openPill"><span class="dot"></span><span id="openTxt"></span></span>
+      </div>
+    </div>
+    <div class="hero-art" id="heroArt"></div>
+  </section>
+
+  <section class="sec" id="story">
+    <div class="story">
+      <div><div class="label" data-t="storyLabel"></div><h2 data-t="storyTitle"></h2></div>
+      <div><p data-t="story1"></p><p data-t="story2"></p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="menu">
+    <div class="label" data-t="menuLabel"></div>
+    <h2 data-t="menuTitle"></h2>
+    <div class="cats" id="menuCats"></div>
+    <div class="menu show" id="menuGrid"></div>
+  </section>
+
+  <section class="sec" id="visit">
+    <div class="label" data-t="visitLabel"></div>
+    <h2 data-t="visitTitle"></h2>
+    <div class="visit">
+      <div class="box">
+        <h3 data-t="addrH"></h3>
+        <p>719 ต.ท่าตูม อ.ศรีมหาโพธิ จ.ปราจีนบุรี 25140</p>
+        <p style="margin-top:14px"><a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Murakami+Ramen+719+%E0%B8%97%E0%B9%88%E0%B8%B2%E0%B8%95%E0%B8%B9%E0%B8%A1+%E0%B8%A8%E0%B8%A3%E0%B8%B5%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B9%82%E0%B8%9E%E0%B8%98%E0%B8%B4%E0%B9%8C+%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%88%E0%B8%B5%E0%B8%99%E0%B8%9A%E0%B8%B8%E0%B8%A3%E0%B8%B5" data-t="mapBtn"></a></p>
+      </div>
+      <div class="box">
+        <h3 data-t="hoursH"></h3>
+        <p class="big">11:00 – 23:00</p>
+        <p data-t="everyday"></p>
+        <h3 style="margin-top:18px" data-t="phoneH"></h3>
+        <p class="big"><a href="tel:0813381003" style="color:inherit;text-decoration:none">081 338 1003</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="logo" id="secretLogo"><span class="seal">村</span><span>Murakami Ramen</span></div>
+    <span>© Murakami Ramen</span>
+  </footer>
+</main>
+
+<div class="cartbar" id="cartbar" hidden><div class="inner">
+  <button class="mine" id="mineBtn" hidden></button>
+  <button id="cartBtn"><span id="cartCount"></span><span id="cartTotal"></span></button>
+</div></div>
+
+<div class="ordv" id="orderView" hidden></div>
+<div class="scrim" id="scrim" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="over" id="statusOver" hidden></div>
+<div class="over" id="adminOver" hidden></div>
+<div class="over" id="sumOver" hidden></div>
+<div class="scrim" id="tblPanel" hidden><div class="sheet" id="tblSheet"></div></div>
+<div class="scrim" id="imgOver" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
+<script>
+/* ---------- data ---------- */
+const MENU=[
+ {id:'kuma',cat:'ramen',price:180,rec:true,jp:'熊本',nm:{th:'คุมาโมโตะ',en:'Kumamoto',jp:'熊本ラーメン'},
+  ds:{th:'ซุปกระดูกหมูเข้มข้น ราดน้ำมันกระเทียมดำ (มายุ) หอมไหม้ละมุน',en:'Rich pork-bone broth finished with black garlic oil (mayu)',jp:'濃厚な豚骨に焦がしにんにく油(マー油)'}},
+ {id:'ton',cat:'ramen',price:160,jp:'とんこつ',nm:{th:'ทงคตสึ',en:'Tonkotsu',jp:'とんこつラーメン'},
+  ds:{th:'ซุปกระดูกหมูสีขาวนวล ครีมมี่ เส้นเล็กตรง',en:'Creamy white pork-bone broth with thin straight noodles',jp:'白濁の豚骨スープに細麺ストレート'}},
+ {id:'shio',cat:'ramen',price:140,jp:'塩',nm:{th:'ชิโอะ',en:'Shio',jp:'塩ラーメン'},
+  ds:{th:'ซุปใสปรุงรสเกลือ เบา สะอาด',en:'Clear salt-seasoned broth, light and clean',jp:'澄んだ塩味のあっさりスープ'}},
+ {id:'shoyu',cat:'ramen',price:120,jp:'醤油',nm:{th:'โชยุ',en:'Shoyu',jp:'醤油ラーメン'},
+  ds:{th:'ซุปสีน้ำตาลเข้ม หอมซีอิ๊วญี่ปุ่น',en:'Dark broth seasoned with Japanese soy sauce',jp:'醤油ダレが香る澄んだ茶色のスープ'}}
+,
+ {id:'tea',cat:'drink',price:40,jp:'緑茶',nm:{th:'ชาเขียวเย็น',en:'Iced green tea',jp:'冷たい緑茶'},
+  ds:{th:'ชาเขียวสไตล์ญี่ปุ่น เย็นสดชื่น',en:'Japanese-style green tea, served cold',jp:'すっきり冷たい緑茶'}},
+ {id:'cola',cat:'drink',price:30,jp:'炭酸',nm:{th:'น้ำอัดลม',en:'Soft drink',jp:'炭酸ジュース'},
+  ds:{th:'น้ำอัดลมเย็นๆ',en:'Chilled soft drink',jp:'よく冷えた炭酸飲料'}},
+ {id:'water',cat:'drink',price:15,jp:'水',nm:{th:'น้ำดื่ม',en:'Drinking water',jp:'お水'},
+  ds:{th:'น้ำดื่มบรรจุขวด',en:'Bottled drinking water',jp:'ボトル入りのお水'}},
+ {id:'beer',cat:'drink',price:90,jp:'麦酒',nm:{th:'เบียร์เย็น',en:'Cold beer',jp:'ビール'},
+  ds:{th:'เบียร์เย็นจัด เข้ากับราเมงและของทอด',en:'Ice-cold beer, a good match for ramen and fried bites',jp:'キンキンに冷えたビール'}},
+ {id:'gyoza',cat:'snack',price:60,jp:'餃子',nm:{th:'เกี๊ยวซ่า',en:'Gyoza',jp:'餃子'},
+  ds:{th:'เกี๊ยวซ่าย่างกรอบ 5 ชิ้น พร้อมน้ำจิ้ม',en:'Five pan-fried dumplings with dipping sauce',jp:'焼き餃子5個 タレ付き'}},
+ {id:'karaage',cat:'snack',price:80,jp:'唐揚',nm:{th:'ไก่คาราอาเกะ',en:'Karaage',jp:'唐揚げ'},
+  ds:{th:'ไก่ทอดญี่ปุ่น กรอบนอกนุ่มใน',en:'Japanese fried chicken, crisp outside and juicy inside',jp:'外はカリッと中はジューシー'}},
+ {id:'tako',cat:'snack',price:70,jp:'蛸焼',nm:{th:'ทาโกะยากิ',en:'Takoyaki',jp:'たこ焼き'},
+  ds:{th:'ทาโกะยากิ 5 ลูก ราดซอสและมายองเนส',en:'Five octopus balls with sauce and mayo',jp:'たこ焼き5個 ソース・マヨ'}},
+ {id:'egg',cat:'snack',price:25,jp:'玉子',nm:{th:'ไข่ต้มซีอิ๊ว',en:'Marinated egg',jp:'味付け玉子'},
+  ds:{th:'ไข่ต้มหมักซีอิ๊วญี่ปุ่น ไข่แดงเยิ้ม',en:'Soft-boiled egg marinated in soy',jp:'半熟の味付け玉子'}}
+];
+const STEPS=['sent','recv','cook','ready','served'];
+const T={
+th:{scanQr:'กรุณาสแกน QR ที่โต๊ะก่อนสั่งอาหาร',backHome:'กลับหน้าแรก',orderTitle:'สั่งอาหาร',orderNow:'สั่งอาหาร',eyebrow:'ศรีมหาโพธิ · ปราจีนบุรี',lead:'ราเมงซุปหลายแบบและเมนูอื่นๆ ให้เลือกตามใจ มานั่งกินที่ร้านแล้วสั่งจากโต๊ะได้เลย',seeMenu:'ดูเมนู',open:'เปิดอยู่ · ถึง 23:00 น.',closed:'ปิดอยู่ · เปิด 11:00 น.',
+ storyLabel:'เรื่องราว',storyTitle:'มานั่งกินกันสบายๆ',story1:'Murakami Ramen อยู่ที่ศรีมหาโพธิ ปราจีนบุรี มีราเมงหลายซุปให้เลือก ตั้งแต่ซุปใสๆ ทานง่าย ไปจนถึงซุปเข้มๆ หอมๆ และมีเมนูอื่นๆ ให้สั่งคู่กันด้วย',story2:'ถ้าชอบรสเข้ม ลองคุมาโมโตะที่หอมน้ำมันกระเทียมดำ ถ้าอยากกินเบาๆ ก็มีซุปใสให้เลือก ไม่แน่ใจว่าจะกินอะไร ถามพนักงานได้เลย',
+ menuLabel:'เมนู',menuTitle:'เมนูของร้าน',menuNote:'ราคาในหน้านี้เป็นราคาตัวอย่าง ร้านปรับได้ทุกเมื่อ',rec:'แนะนำ',add:'เลือก',baht:'บาท',
+ visitLabel:'เยี่ยมร้าน',visitTitle:'ที่ตั้งและเวลาเปิด',addrH:'ที่อยู่',mapBtn:'เปิดแผนที่',hoursH:'เวลาเปิด',everyday:'เปิดทุกวัน',phoneH:'โทรศัพท์',
+ qty:'จำนวน',notes:'หมายเหตุ',notePh:'เช่น ไม่ใส่ต้นหอม',addCart:'เพิ่มลงตะกร้า',added:'เพิ่มลงตะกร้าแล้ว',
+ chips:['ไม่ใส่ต้นหอม','เส้นแข็ง','เส้นนุ่ม','ไม่เผ็ด','เพิ่มไข่'],
+ cart:'ตะกร้า',items:'รายการ',cartH:'ตะกร้าของคุณ',table:'โต๊ะ',pickTable:'เลือกโต๊ะ',remove:'ลบ',edit:'แก้หมายเหตุ',total:'รวม',send:'ส่งออเดอร์',close:'ปิด',empty:'ยังไม่มีรายการ',
+ mine:'ออเดอร์ของฉัน',noMine:'ยังไม่มีออเดอร์',order:'ออเดอร์',back:'กลับไปสั่งเพิ่ม',tableLbl:'โต๊ะ',sentOk:'ส่งออเดอร์แล้ว',
+ st:{sent:'ส่งออเดอร์แล้ว',recv:'ได้รับออเดอร์แล้ว',cook:'กำลังปรุงอาหาร',ready:'รอเสิร์ฟ',served:'เสิร์ฟแล้ว'},
+ sd:{sent:'ออเดอร์ของคุณถึงครัวแล้ว รอร้านยืนยัน',recv:'ร้านรับออเดอร์เรียบร้อย กำลังเตรียมวัตถุดิบ',cook:'เชฟกำลังปรุงชามของคุณ',ready:'ราเมงเสร็จแล้ว พนักงานกำลังนำไปเสิร์ฟ',served:'เสิร์ฟแล้ว ทานให้อร่อยนะครับ'},cancelled:'ออเดอร์ถูกยกเลิกโดยร้าน กรุณาติดต่อพนักงาน'},
+en:{scanQr:'Please scan the QR code at your table to order',backHome:'Back to home',orderTitle:'Order',orderNow:'Order now',eyebrow:'Si Mahosot · Prachinburi',lead:'Ramen in a few different broths, plus other dishes to go with it. Sit down and order right from your table.',seeMenu:'See the menu',open:'Open · until 23:00',closed:'Closed · opens 11:00',
+ storyLabel:'Story',storyTitle:'Come sit down, stay a while',story1:'Murakami Ramen is in Si Mahosot, Prachinburi. You will find ramen in several broths, from light and clear to deep and rich, plus other dishes to order alongside.',story2:'Like something bold? Try the Kumamoto, finished with black garlic oil. Want something lighter? Go for a clear broth. Not sure what to pick? Just ask our staff.',
+ menuLabel:'Menu',menuTitle:'Our menu',menuNote:'Prices shown are sample prices and can be changed by the shop.',rec:'Signature',add:'Choose',baht:'THB',
+ visitLabel:'Visit',visitTitle:'Find us',addrH:'Address',mapBtn:'Open map',hoursH:'Opening hours',everyday:'Open every day',phoneH:'Phone',
+ qty:'Quantity',notes:'Notes',notePh:'e.g. no spring onion',addCart:'Add to basket',added:'Added to basket',
+ chips:['No spring onion','Firm noodles','Soft noodles','Not spicy','Extra egg'],
+ cart:'Basket',items:'items',cartH:'Your basket',table:'Table',pickTable:'Choose table',remove:'Remove',edit:'Edit notes',total:'Total',send:'Send order',close:'Close',empty:'Nothing here yet',
+ mine:'My orders',noMine:'No orders yet',order:'Order',back:'Order more',tableLbl:'Table',sentOk:'Order sent',
+ st:{sent:'Order sent',recv:'Order received',cook:'Cooking',ready:'Ready to serve',served:'Served'},
+ sd:{sent:'Your order has reached the kitchen. Waiting for confirmation.',recv:'The shop has your order and is preparing ingredients.',cook:'The chef is making your bowl.',ready:'Your ramen is ready and on its way to your table.',served:'Served. Enjoy your meal.'},cancelled:'This order was cancelled by the shop. Please ask a staff member.'},
+jp:{scanQr:'ご注文にはテーブルのQRコードを読み取ってください',backHome:'トップへ戻る',orderTitle:'ご注文',orderNow:'注文する',eyebrow:'シーマホソット · プラチンブリ',lead:'いろいろなスープのラーメンと、ほかのメニューもあります。お席についたら、そのままテーブルから注文できます。',seeMenu:'メニューを見る',open:'営業中 · 23:00まで',closed:'営業時間外 · 11:00開店',
+ storyLabel:'私たちについて',storyTitle:'ゆっくりくつろいでいってください',story1:'Murakami Ramenはプラチンブリ県シーマホソットにあります。あっさり澄んだスープから濃厚なスープまで、ラーメンをいくつか用意していて、ほかのメニューもあります。',story2:'しっかりした味なら、焦がしにんにく油の熊本がおすすめです。軽めがよければ澄んだスープをどうぞ。迷ったらスタッフにお気軽に聞いてください。',
+ menuLabel:'メニュー',menuTitle:'メニュー',menuNote:'表示価格はサンプルです。店舗で変更できます。',rec:'おすすめ',add:'選ぶ',baht:'バーツ',
+ visitLabel:'アクセス',visitTitle:'店舗情報',addrH:'住所',mapBtn:'地図を開く',hoursH:'営業時間',everyday:'年中無休',phoneH:'電話',
+ qty:'数量',notes:'備考',notePh:'例：ネギ抜き',addCart:'カートに追加',added:'カートに追加しました',
+ chips:['ネギ抜き','麺かため','麺やわらか','辛くしない','玉子追加'],
+ cart:'カート',items:'点',cartH:'カート',table:'テーブル',pickTable:'テーブルを選択',remove:'削除',edit:'備考を編集',total:'合計',send:'注文する',close:'閉じる',empty:'まだ商品がありません',
+ mine:'注文状況',noMine:'注文はありません',order:'注文',back:'追加で注文する',tableLbl:'テーブル',sentOk:'注文を送信しました',
+ st:{sent:'注文送信',recv:'注文受付',cook:'調理中',ready:'配膳待ち',served:'提供済み'},
+ sd:{sent:'ご注文が厨房に届きました。確認をお待ちください。',recv:'注文を受け付け、準備を始めています。',cook:'シェフが一杯を作っています。',ready:'できあがりました。まもなくお席へお持ちします。',served:'お待たせしました。ごゆっくりどうぞ。'},cancelled:'店舗により注文が取り消されました。スタッフにお声がけください。'}
+};
+Object.assign(T.th,{cat:{ramen:'ราเมง',drink:'เครื่องดื่ม',snack:'กับแกล้ม',call:'เรียกพนักงาน'},callDesc:'กดปุ่มด้านล่างเพื่อเรียกพนักงานมาที่โต๊ะของคุณ',callBtn:'เรียกพนักงาน',calledOk:'เรียกพนักงานแล้ว',callWait:'พนักงานกำลังไปที่โต๊ะ กรุณารอสักครู่'});
+Object.assign(T.en,{cat:{ramen:'Ramen',drink:'Drinks',snack:'Sides',call:'Call staff'},callDesc:'Tap the button below to call a staff member to your table.',callBtn:'Call staff',calledOk:'Staff called',callWait:'Staff are on the way. Please wait a moment.'});
+Object.assign(T.jp,{cat:{ramen:'ラーメン',drink:'ドリンク',snack:'おつまみ',call:'スタッフ呼出'},callDesc:'下のボタンを押すとスタッフがテーブルに伺います。',callBtn:'スタッフを呼ぶ',calledOk:'スタッフを呼びました',callWait:'スタッフが向かっています。少々お待ちください。'});
+Object.assign(T.th,{sessLoading:'กำลังโหลดโต๊ะ…',sessClosed:'โต๊ะนี้ปิดแล้ว กรุณาขอ QR ใหม่จากพนักงาน',askQr:'กรุณาขอ QR สั่งอาหารจากพนักงาน แล้วสแกนเพื่อสั่ง',callFail:'เรียกไม่สำเร็จ ลองใหม่อีกครั้ง',billBtn:'เช็กบิล',billWait:'แจ้งเช็กบิลแล้ว พนักงานกำลังมา',billOk:'แจ้งเช็กบิลแล้ว',noConn:'ยังเชื่อมต่อระบบไม่ได้ ลองใหม่อีกครั้ง',out:'หมด',soldOutCart:'มีรายการที่หมดแล้ว กรุณาลบออกก่อนส่งออเดอร์',sendFail:'ส่งออเดอร์ไม่สำเร็จ ลองใหม่อีกครั้ง',qrInvalid:'QR นี้ใช้ไม่ได้ กรุณาขอ QR ใหม่จากพนักงาน',viewSum:'ดูสรุปรายการ',voided:'ยกเลิกรายการ',sumTitle:'สรุปรายการสั่งอาหาร',tIn:'เวลาเข้าร้าน',tOut:'เวลาออกร้าน',thanks:'ขอบคุณที่ใช้บริการ',saveImg:'บันทึกเป็นรูป',notReceipt:'เอกสารนี้เป็นสรุปรายการสั่งอาหาร ไม่ใช่ใบเสร็จรับเงินหรือใบกำกับภาษี',saveFail:'บันทึกรูปไม่สำเร็จ ลองใหม่อีกครั้ง',holdSave:'กดค้างที่รูปเพื่อบันทึก'});
+Object.assign(T.en,{sessLoading:'Loading table…',sessClosed:'This table is closed. Please ask staff for a new QR.',askQr:'Please ask staff for an order QR, then scan it to order.',callFail:'Could not call. Please try again.',billBtn:'Request bill',billWait:'Bill requested. Staff are on the way.',billOk:'Bill requested',noConn:'Not connected yet. Please try again.',out:'Sold out',soldOutCart:'Some items are sold out. Remove them before sending.',sendFail:'Could not send the order. Please try again.',qrInvalid:'This QR is not valid. Please ask staff for a new one.',viewSum:'View summary',voided:'voided',sumTitle:'Order summary',tIn:'Time in',tOut:'Time out',thanks:'Thank you for dining with us',saveImg:'Save as image',notReceipt:'This is an order summary, not an official receipt or tax invoice.',saveFail:'Could not save the image. Please try again.',holdSave:'Press and hold the image to save'});
+Object.assign(T.jp,{sessLoading:'テーブルを読み込み中…',sessClosed:'このテーブルは終了しました。スタッフに新しいQRをお尋ねください。',askQr:'スタッフから注文用QRをもらい、読み取ってご注文ください。',callFail:'呼び出せませんでした。もう一度お試しください。',billBtn:'お会計',billWait:'お会計を依頼しました。スタッフが向かっています。',billOk:'お会計を依頼しました',noConn:'接続できません。もう一度お試しください。',out:'売り切れ',soldOutCart:'売り切れの商品があります。削除してから送信してください。',sendFail:'注文を送信できませんでした。もう一度お試しください。',qrInvalid:'このQRは無効です。スタッフに新しいQRをお尋ねください。',viewSum:'注文内容を見る',voided:'取消',sumTitle:'ご注文内容',tIn:'入店時刻',tOut:'退店時刻',thanks:'ご利用ありがとうございました',saveImg:'画像として保存',notReceipt:'これは注文内容の控えであり、領収書・税務書類ではありません。',saveFail:'画像を保存できませんでした。',holdSave:'画像を長押しして保存'});
+/* ---------- bowl illustration ---------- */
+function bowl(k){
+ const L='stroke="var(--paper)"',R='stroke="var(--red-hi)"';
+ const broth={kuma:'#1c1010',ton:'#2d2522',shio:'none',shoyu:'#2b1a10'}[k];
+ let s='<svg viewBox="0 0 200 216" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+ s+='<g class="steam" '+L+' stroke-width="1.4" opacity=".55"><path d="M70 34c-8-8 8-14 0-24"/><path d="M100 32c-8-8 8-14 0-26"/><path d="M130 34c-8-8 8-14 0-24"/></g>';
+ s+='<circle cx="100" cy="128" r="84" '+L+' stroke-width="1.6" opacity=".6"/>';
+ s+='<circle cx="100" cy="128" r="74" '+L+' stroke-width="1" opacity=".35" fill="'+broth+'"/>';
+ if(k==='kuma'){s+='<circle cx="100" cy="128" r="46" fill="#050303" '+R+' stroke-width="1.2" opacity=".95"/><circle cx="100" cy="128" r="32" '+L+' stroke-width=".8" opacity=".35"/><circle cx="100" cy="128" r="18" '+L+' stroke-width=".8" opacity=".35"/>';}
+ if(k==='shio'){s+='<circle cx="100" cy="128" r="58" '+L+' stroke-width=".8" stroke-dasharray="2 6" opacity=".5"/><circle cx="100" cy="128" r="40" '+L+' stroke-width=".8" stroke-dasharray="2 6" opacity=".4"/>';}
+ if(k==='ton'){s+='<path d="M44 150c18 10 40 12 60 8" '+L+' stroke-width=".8" opacity=".35"/><path d="M110 98c20-6 36 0 46 10" '+L+' stroke-width=".8" opacity=".35"/>';}
+ s+='<g '+L+' stroke-width="1.5"><circle cx="76" cy="112" r="17"/><circle cx="76" cy="112" r="9" '+R+'/><circle cx="118" cy="104" r="17"/><circle cx="118" cy="104" r="9" '+R+'/></g>';
+ s+='<g '+L+' stroke-width="1.5"><ellipse cx="96" cy="150" rx="17" ry="13"/><circle cx="96" cy="150" r="6" fill="var(--red)" stroke="none"/></g>';
+ s+='<rect x="140" y="124" width="10" height="34" '+L+' stroke-width="1.5" transform="rotate(14 145 141)"/>';
+ s+='<g fill="var(--red-hi)" stroke="none"><circle cx="62" cy="140" r="2.4"/><circle cx="134" cy="152" r="2.4"/><circle cx="118" cy="140" r="2"/><circle cx="84" cy="88" r="2"/><circle cx="104" cy="170" r="2.4"/><circle cx="142" cy="108" r="2"/></g>';
+ s+='<path d="M176 30L124 92M184 40L132 100" '+L+' stroke-width="1.6" opacity=".7"/></svg>';
+ return s;
+}
+function art(m){
+ if(m.cat==='ramen')return bowl(m.id);
+ const L='stroke="var(--paper)"',R='stroke="var(--red-hi)"';
+ let s='<svg viewBox="0 0 200 216" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+ if(m.id==='beer'){
+  s+='<path d="M54 66h72l-6 124H60z" '+L+' stroke-width="1.6" opacity=".7"/><path d="M126 86h22a14 14 0 0 1 14 14v40a14 14 0 0 1-14 14h-26" '+L+' stroke-width="1.6" opacity=".7"/><path d="M58 104h64l-4 80H62z" fill="#2b1a10" '+L+' stroke-width="1" opacity=".5"/>';
+  s+='<g '+R+' stroke-width="1.6"><circle cx="66" cy="60" r="14"/><circle cx="90" cy="52" r="16"/><circle cx="114" cy="60" r="14"/></g>';
+ }else if(m.cat==='drink'){
+  s+='<path d="M58 60l12 128h60l12-128z" '+L+' stroke-width="1.6" opacity=".7"/><path d="M63 104h74" '+R+' stroke-width="1.4"/><path d="M122 22L108 112" '+L+' stroke-width="1.6" opacity=".7"/>';
+  s+='<g '+R+' stroke-width="1.4"><rect x="80" y="120" width="22" height="22" transform="rotate(10 91 131)"/><rect x="106" y="140" width="22" height="22" transform="rotate(-8 117 151)"/></g>';
+ }else{
+  s+='<ellipse cx="100" cy="140" rx="84" ry="44" '+L+' stroke-width="1.6" opacity=".6"/><ellipse cx="100" cy="140" rx="68" ry="34" '+L+' stroke-width="1" opacity=".35"/>';
+  s+='<g '+L+' stroke-width="1.5"><path d="M56 140c0-22 28-22 28 0z"/><path d="M86 130c0-22 28-22 28 0z"/><path d="M116 140c0-22 28-22 28 0z"/></g><g '+R+' stroke-width="1.4"><path d="M62 128h16M92 118h16M122 128h16"/></g>';
+  s+='<g class="steam" '+L+' stroke-width="1.4" opacity=".55"><path d="M80 70c-8-8 8-14 0-24"/><path d="M110 68c-8-8 8-14 0-26"/></g>';
+ }
+ return s+'</svg>';
+}
+const CATS=['ramen','drink','snack','call'];
+let hcat='ramen',ocat='ramen';
+const tabsHtml=(cur,call)=>CATS.filter(c=>call||c!=='call').map(c=>`<button data-cat="${c}" aria-pressed="${c===cur}">${t().cat[c]}</button>`).join('');
+/* ---------- helpers & storage ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const mem={};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?(k in mem?mem[k]:d):JSON.parse(v)}catch(e){return k in mem?mem[k]:d}},
+ set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
+ del(k){delete mem[k];try{localStorage.removeItem(k)}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let lang=store.get('mr_lang','th'); if(!T[lang])lang='th';
+let cart=[],sel=null;
+const t=()=>T[lang];
+const ICON={
+ sent:'<path d="M4 12l16-8-6 16-3-7z"/>',recv:'<path d="M5 12l5 5 9-10"/>',
+ cook:'<path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/>',
+ ready:'<path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 8c-1-2 1-2 0-4M14 8c-1-2 1-2 0-4"/>',
+ served:'<path d="M4 17h16M6 17a6 6 0 0 1 12 0M12 8v3"/>'};
+const money=n=>(+n||0).toLocaleString('en-US');
+function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),3200)}
+const BKK=o=>new Intl.DateTimeFormat('en-GB',Object.assign({timeZone:'Asia/Bangkok'},o));
+const fmtT=ms=>BKK({hour:'2-digit',minute:'2-digit'}).format(new Date(ms));
+const fmtDT=ms=>BKK({day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(ms)).replace(',','');
+const durTxt=ms=>{const m=Math.max(0,Math.floor(ms/60000));return m<60?m+' น.':Math.floor(m/60)+' ชม. '+(m%60)+' น.'};
+const vibe=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+
+/* ---------- menu availability (shared) ---------- */
+let MSTAT={out:{},key:''};
+const svcKey=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Bangkok'}).format(new Date(Date.now()-11*3600e3));
+const outMap=()=>MSTAT.key===svcKey()?(MSTAT.out||{}):{};
+const isOut=id=>!!outMap()[id];
+
+/* ---------- table session (customer side) ---------- */
+let SID=null,SESS=null,sessUnsub=null,wasOpen=false;
+(()=>{const v=store.get('mr_sid',null);SID=v&&v.sid||null})();
+const setSid=sid=>{SID=sid;store.set('mr_sid',{sid,at:Date.now()})};
+const forgetSid=()=>{SID=null;SESS=null;wasOpen=false;store.del('mr_sid');if(sessUnsub){sessUnsub();sessUnsub=null}};
+const sessOpen=()=>!!(SESS&&SESS.open);
+const lineAmt=l=>l.x?0:(l.price||0)*l.qty;
+const ordTotal=o=>(o.lines||[]).reduce((s,l)=>s+lineAmt(l),0);
+const sessTotal=S=>Object.values((S&&S.orders)||{}).filter(o=>!o.cancelled).reduce((s,o)=>s+ordTotal(o),0);
+const myOrders=()=>SESS&&SESS.orders?Object.entries(SESS.orders).map(([id,o])=>({...o,id})).sort((a,b)=>b.created-a.created):[];
+const itemName=(id,lg)=>{const m=MENU.find(x=>x.id===id);return m?m.nm[lg||lang]:id};
+
+/* ---------- static text, language ---------- */
+function applyLang(){
+ document.documentElement.lang=lang==='jp'?'ja':lang;
+ document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t()[e.dataset.t]);
+ document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.l===lang)));
+ renderMenu();updateOpen();updateBar();
+ if(!$('#statusOver').hidden)renderStatus(true);
+ if(!$('#sumOver').hidden)renderSummary();
+ refreshOrderView(true);
+ if(!$('#scrim').hidden&&sheetMode)sheetMode==='item'?openItem(sel,true):openCart(true);
+}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;store.set('mr_lang',lang);applyLang()});
+function renderMenu(){
+ $('#menuCats').innerHTML=tabsHtml(hcat,false);
+ document.querySelectorAll('#menuCats [data-cat]').forEach(b=>b.onclick=()=>{hcat=b.dataset.cat;renderMenu()});
+ $('#menuGrid').innerHTML=MENU.filter(m=>m.cat===hcat).map(m=>`<div class="card static">${m.rec?`<span class="tag">${t().rec}</span>`:''}${art(m)}<span class="nm">${m.nm[lang]}</span><span class="ds">${m.ds[lang]}</span></div>`).join('');
+}
+
+/* ---------- order view (the only place with prices and add buttons) ---------- */
+let ovSig='';
+const ovKey=()=>[lang,ocat,SID,sessOpen(),SESS&&SESS.table,!!(SESS&&SESS.callStaff>0),!!(SESS&&SESS.callBill>0),JSON.stringify(outMap())].join('|');
+function refreshOrderView(force){if($('#orderView').hidden)return;if(force||ovKey()!==ovSig)renderOrderView()}
+function renderOrderView(){
+ ovSig=ovKey();
+ const open=sessOpen(),S=SESS;
+ const head=open?`<span class="pill on"><span class="dot"></span>${t().tableLbl} ${S.table}</span>`
+  :`<p class="note" style="color:var(--red-hi);margin:0">${SID&&!S?t().sessLoading:(S&&!S.open?t().sessClosed:t().askQr)}</p>`;
+ const cs=open&&S.callStaff>0,cb=open&&S.callBill>0;
+ $('#orderView').innerHTML=`<div class="wrap"><header><button class="btn ghost" id="ovBack">← ${t().backHome}</button></header><h2>${t().orderTitle}</h2>${head}
+  <div class="cats">${tabsHtml(ocat,true)}</div>
+  ${ocat==='call'?`<div class="callbox"><p class="sub">${t().callDesc}</p><button class="btn" id="callBtn" ${open&&!cs?'':'disabled'}>${cs?t().callWait:t().callBtn}</button><button class="btn ghost" id="billBtn" style="margin-top:12px" ${open&&!cb?'':'disabled'}>${cb?t().billWait:t().billBtn}</button></div>`
+  :`<div class="omenu">${MENU.filter(m=>m.cat===ocat).map(m=>{const o=isOut(m.id);return `<button class="ocard${o?' out':''}" data-id="${m.id}" ${open&&!o?'':'disabled'}>${m.rec?`<span class="tag">${t().rec}</span>`:''}${art(m)}<span class="nm">${m.nm[lang]}</span><span class="ds">${m.ds[lang]}</span><span class="pr"><b>${money(m.price)} <small>${t().baht}</small></b><span class="add">${o?t().out:(open?t().add+' +':'')}</span></span></button>`}).join('')}</div>`}</div>`;
+ document.querySelectorAll('#orderView [data-cat]').forEach(b=>b.onclick=()=>{ocat=b.dataset.cat;renderOrderView()});
+ const c1=$('#callBtn');if(c1)c1.onclick=()=>callAction('staff');
+ const c2=$('#billBtn');if(c2)c2.onclick=()=>callAction('bill');
+ $('#ovBack').onclick=closeOrderView;
+ document.querySelectorAll('.ocard:not([disabled])').forEach(c=>c.onclick=()=>openItem(MENU.find(m=>m.id===c.dataset.id)));
+}
+async function callAction(k){
+ if(!sessOpen())return;
+ if(!db||!myUid){toast(t().noConn);return}
+ try{await db.collection('sessions').doc(SID).update(k==='bill'?{callBill:Date.now()}:{callStaff:Date.now()})}catch(e){console.error(e);toast(t().callFail);return}
+ toast(k==='bill'?t().billOk:t().calledOk);vibe(60);
+}
+function openOrderView(){$('#orderView').hidden=false;document.body.style.overflow='hidden';renderOrderView();$('#orderView').scrollTop=0;updateBar()}
+function closeOrderView(){$('#orderView').hidden=true;document.body.style.overflow='';updateBar()}
+document.querySelectorAll('.openOrder').forEach(b=>b.onclick=openOrderView);
+$('#heroArt').innerHTML=bowl('kuma');
+function updateOpen(){
+ const h=+new Intl.DateTimeFormat('en-GB',{hour:'2-digit',hour12:false,timeZone:'Asia/Bangkok'}).format(new Date())%24;
+ const on=h>=11&&h<23;$('#openPill').classList.toggle('on',on);$('#openTxt').textContent=on?t().open:t().closed;
+}
+
+/* ---------- item sheet ---------- */
+let sheetMode=null,draft={qty:1,text:''};
+function showSheet(html,mode){sheetMode=mode;$('#sheet').innerHTML=html;$('#scrim').hidden=false;document.body.style.overflow='hidden'}
+function closeSheet(){sheetMode=null;$('#scrim').hidden=true;if($('#orderView').hidden&&$('#statusOver').hidden&&$('#sumOver').hidden&&$('#adminOver').hidden)document.body.style.overflow=''}
+$('#scrim').onclick=e=>{if(e.target.id==='scrim')closeSheet()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){
+ if(!$('#imgOver').hidden)closeImg();
+ else if(!$('#tblPanel').hidden)closePanel();
+ else if(!$('#scrim').hidden)closeSheet();
+ else if(!$('#sumOver').hidden)closeSummary();
+ else if(!$('#statusOver').hidden)closeStatus();
+ else if(!$('#orderView').hidden)closeOrderView()}});
+function openItem(m,keep){
+ if(!m)return;
+ sel=m;if(!keep)draft={qty:1,text:''};
+ showSheet(`<h3>${m.nm[lang]}</h3><p class="sub">${m.ds[lang]}</p>
+ <span class="fld">${t().qty}</span><div class="qty"><button id="qm" aria-label="-">−</button><output id="qv">${draft.qty}</output><button id="qp" aria-label="+">+</button></div>
+ <label class="fld" for="nt">${t().notes}</label><textarea id="nt" placeholder="${t().notePh}">${esc(draft.text)}</textarea>
+ <button class="btn" id="addBtn"><span>${t().addCart}</span><span id="ap">${money(m.price*draft.qty)} ${t().baht}</span></button>`,'item');
+ const upd=()=>{$('#qv').textContent=draft.qty;$('#ap').textContent=money(m.price*draft.qty)+' '+t().baht};
+ $('#qm').onclick=()=>{draft.qty=Math.max(1,draft.qty-1);upd()};
+ $('#qp').onclick=()=>{draft.qty=Math.min(20,draft.qty+1);upd()};
+ $('#nt').oninput=e=>draft.text=e.target.value;
+ $('#addBtn').onclick=()=>{
+  if(isOut(m.id)){toast(t().out);closeSheet();return}
+  const note=draft.text.trim();
+  cart.push({id:m.id,qty:draft.qty,note,noteShown:note});closeSheet();updateBar(true);toast(t().added);
+ };
+}
+
+/* ---------- cart ---------- */
+const cartTotal=()=>cart.reduce((s,l)=>s+MENU.find(m=>m.id===l.id).price*l.qty,0);
+const cartQty=()=>cart.reduce((s,l)=>s+l.qty,0);
+function updateBar(bump){
+ const has=cart.length>0,mo=myOrders(),act=mo.filter(o=>o.status<4&&!o.cancelled).length;
+ const closed=!!(SESS&&!SESS.open);
+ const cb=$('#cartBtn'),mb=$('#mineBtn');
+ cb.hidden=!has;$('#cartCount').textContent=`${t().cart} · ${cartQty()} ${t().items}`;$('#cartTotal').textContent=`${money(cartTotal())} ${t().baht}`;
+ mb.hidden=!(closed||(sessOpen()&&mo.length));
+ mb.textContent=closed?t().viewSum:`${t().mine}${act?' ('+act+')':''}`;
+ $('#cartbar').hidden=cb.hidden&&mb.hidden;
+ if(bump){cb.classList.remove('bump');void cb.offsetWidth;cb.classList.add('bump')}
+}
+$('#cartBtn').onclick=()=>openCart();
+$('#mineBtn').onclick=()=>{if(SESS&&!SESS.open)openSummary();else openStatus()};
+function openCart(keep){
+ const open=sessOpen(),bad=cart.some(l=>isOut(l.id));
+ showSheet(`<h3>${t().cartH}</h3><p class="sub" ${open?'':'style="color:var(--red-hi)"'}>${open?t().tableLbl+' '+SESS.table:t().askQr}</p>
+ ${cart.length?`<ul class="lines">${cart.map((l,i)=>{const m=MENU.find(x=>x.id===l.id),o=isOut(l.id);return `<li><span class="n">${l.qty} × ${m.nm[lang]}${o?` <span style="color:var(--red-hi)">(${t().out})</span>`:''}</span><span class="p">${money(m.price*l.qty)}</span>${l.noteShown?`<span class="m">${esc(l.noteShown)}</span>`:''}<button class="x" data-i="${i}">${t().remove}</button></li>`}).join('')}</ul>
+ <div class="sum"><span>${t().total}</span><span>${money(cartTotal())} ${t().baht}</span></div>
+ ${bad?`<p class="note" style="color:var(--red-hi)">${t().soldOutCart}</p>`:''}
+ <button class="btn" id="sendBtn" ${open&&!bad?'':'disabled'}><span>${t().send}</span><span>→</span></button>`:`<p class="sub">${t().empty}</p>`}`,'cart');
+ document.querySelectorAll('.lines .x').forEach(b=>b.onclick=()=>{cart.splice(+b.dataset.i,1);updateBar();cart.length?openCart(true):closeSheet()});
+ const sb=$('#sendBtn');if(sb)sb.onclick=sendOrder;
+}
+
+/* ---------- firebase ---------- */
+const FB_CONFIG={apiKey:"AIzaSyA1dZcYvSd_VBWOazOM5o79O5r9ni8ggFI",authDomain:"murakami-ramen.firebaseapp.com",projectId:"murakami-ramen",storageBucket:"murakami-ramen.firebasestorage.app",messagingSenderId:"204917649594",appId:"1:204917649594:web:48b96a8ef803849172d283",measurementId:"G-3NW0LQH8SH"};
+const ADMIN_UID='syn3Yx7QRzQu2wdcQo3N5ah8MmD2';
+let auth=null,db=null,myUid=null,unsubs=[];
+let OPENS=[],CLOSEDS=[],LEGACY=[];
+try{firebase.initializeApp(FB_CONFIG);auth=firebase.auth();db=firebase.firestore()}catch(e){console.error('Firebase init failed',e)}
+const fromSnap=s=>s.docs.map(d=>({...d.data(),id:d.id}));
+const isAdmin=()=>!!(auth&&auth.currentUser&&auth.currentUser.uid===ADMIN_UID);
+function watchSession(){
+ if(sessUnsub){sessUnsub();sessUnsub=null}
+ if(!SID||!db||!auth||!auth.currentUser)return;
+ const sid=SID;
+ sessUnsub=db.collection('sessions').doc(sid).onSnapshot(s=>{
+  if(sid!==SID)return;
+  if(!s.exists){forgetSid();toast(t().qrInvalid);onSession();return}
+  SESS={...s.data(),sid};onSession();
+ },e=>{console.error('session',e);if(sid!==SID)return;forgetSid();toast(t().qrInvalid);onSession()});
+}
+function onSession(){
+ if(SESS&&!SESS.open&&SESS.closedAt&&Date.now()-SESS.closedAt>864e5)forgetSid();
+ const nowOpen=sessOpen();
+ if(wasOpen&&SESS&&!nowOpen){closeSheet();closeOrderView();closeStatus();openSummary()}
+ wasOpen=nowOpen;
+ updateBar();refreshOrderView();
+ if(!$('#statusOver').hidden)renderStatus(false);
+ if(!$('#sumOver').hidden)renderSummary();
+ if(!$('#scrim').hidden&&sheetMode==='cart')openCart(true);
+}
+function listen(){
+ unsubs.forEach(u=>u());unsubs=[];OPENS=[];CLOSEDS=[];LEGACY=[];
+ if(sessUnsub){sessUnsub();sessUnsub=null}
+ if(!auth||!auth.currentUser)return;
+ const u=auth.currentUser;myUid=u.uid;
+ const isAd=u.uid===ADMIN_UID;
+ unsubs.push(db.collection('menu').doc('status').onSnapshot(s=>{
+  MSTAT=s.exists?{out:s.data().out||{},key:s.data().key||''}:{out:{},key:''};
+  refreshOrderView();aSig='';renderAdmin();if(!$('#scrim').hidden&&sheetMode==='cart')openCart(true);
+ },e=>console.error('menu',e)));
+ if(isAd){
+  let f1=true;
+  unsubs.push(db.collection('sessions').where('open','==',true).onSnapshot(s=>{OPENS=s.docs.map(d=>({...d.data(),sid:d.id}));if(f1){f1=false;primeKnown()}aSig='';updateBar();renderAdmin()},e=>console.error('open sessions',e)));
+  unsubs.push(db.collection('sessions').orderBy('closedAt','desc').limit(60).onSnapshot(s=>{CLOSEDS=s.docs.map(d=>({...d.data(),sid:d.id}));aSig=''},e=>console.error('closed sessions',e)));
+  unsubs.push(db.collection('orders').onSnapshot(s=>{LEGACY=fromSnap(s);aSig=''},()=>{}));
+ }
+ watchSession();
+}
+if(auth)auth.onAuthStateChanged(u=>{
+ if(!u){myUid=null;OPENS=[];CLOSEDS=[];LEGACY=[];auth.signInAnonymously().catch(e=>console.error('anon',e));return}
+ listen();
+ if(!$('#adminOver').hidden)openAdmin();
+});
+async function sendOrder(){
+ if(!cart.length)return;
+ if(!sessOpen()){toast(t().askQr);return}
+ if(cart.some(l=>isOut(l.id))){toast(t().soldOutCart);openCart(true);return}
+ if(!db||!myUid){toast(t().noConn);return}
+ const oid='o'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+ const lines=cart.map(l=>({id:l.id,qty:l.qty,note:l.note,price:MENU.find(m=>m.id===l.id).price}));
+ const o={no:'A'+Date.now().toString(36).slice(-4).toUpperCase(),uid:myUid,lines,total:lines.reduce((s,l)=>s+l.price*l.qty,0),status:0,cancelled:false,created:Date.now()};
+ try{await Promise.race([db.collection('sessions').doc(SID).update({['orders.'+oid]:o}),new Promise((_,j)=>setTimeout(()=>j({code:'timeout'}),10000))]);cart=[];closeSheet();updateBar();openStatus();vibe(60)}
+ catch(e){console.error(e);toast(t().sendFail+(e&&e.code?' ('+e.code+')':''))}
+}
+
+/* ---------- customer status overlay (history of the table) ---------- */
+let stSig='',lastSt={};
+function openStatus(){$('#statusOver').hidden=false;document.body.style.overflow='hidden';renderStatus(true)}
+function closeStatus(){$('#statusOver').hidden=true;if($('#orderView').hidden&&$('#sumOver').hidden)document.body.style.overflow='';stSig='';updateBar()}
+function orderLines(o){return o.lines.map(l=>{const a=`${l.qty} × ${itemName(l.id)}`;
+ return `<li>${l.x?`<s style="opacity:.55">${a}</s> <small style="display:inline;color:var(--red-hi)">${t().voided}</small>`:`${a}${l.price?`<span style="float:right">${money(l.price*l.qty)}</span>`:''}`}${l.note?`<small>${esc(l.note)}</small>`:''}</li>`}).join('')}
+function renderStatus(force){
+ const os=myOrders();
+ const sig=lang+JSON.stringify(os.map(o=>[o.id,o.lines,o.cancelled]))+(SESS?SESS.table:'');
+ const root=$('#statusOver');
+ if(force||sig!==stSig){
+  stSig=sig;
+  root.innerHTML=`<div class="wrap"><header><h2>${t().mine}${SESS?' · '+t().tableLbl+' '+SESS.table:''}</h2><button class="btn ghost" id="stClose">${t().back}</button></header>`+
+  (os.length?os.map(o=>`<article class="ord" data-id="${o.id}"><div class="hd"><span class="no">${t().order} ${o.no||o.id}</span><span style="color:var(--mute)">${fmtT(o.created)} · ${money(ordTotal(o))} ${t().baht}</span></div>
+   <div class="now"></div><p class="now-d"></p>
+   <div class="track" style="--p:0">${'<span class="fill"></span>'}${STEPS.map(s=>`<div class="stp" data-s="${s}"><i><svg viewBox="0 0 24 24" aria-hidden="true">${ICON[s]}</svg></i><span>${t().st[s]}</span></div>`).join('')}</div>
+   <ul class="a-it" style="margin-top:18px">${orderLines(o)}</ul></article>`).join('')+`<div class="sum"><span>${t().total}</span><span>${money(sessTotal(SESS))} ${t().baht}</span></div>`:`<p class="sub">${t().noMine}</p>`)+'</div>';
+  $('#stClose').onclick=()=>{closeStatus();if(sessOpen())openOrderView()};
+  requestAnimationFrame(()=>requestAnimationFrame(()=>updateTracks(os)));
+ }else updateTracks(os);
+}
+function updateTracks(os){
+ os.forEach(o=>{
+  const el=document.querySelector(`.ord[data-id="${o.id}"]`);if(!el)return;
+  const key=o.cancelled?'x':STEPS[o.status];
+  el.querySelector('.track').style.setProperty('--p',o.status/4);
+  el.querySelectorAll('.stp').forEach((s,i)=>{s.classList.toggle('done',i<o.status||o.status===4);s.classList.toggle('cur',i===o.status&&o.status<4)});
+  el.querySelector('.now').textContent=o.cancelled?'×':t().st[key];
+  el.querySelector('.now-d').textContent=o.cancelled?t().cancelled:t().sd[key];
+  if(lastSt[o.id]!==undefined&&lastSt[o.id]!==o.status)vibe([80,60,80]);
+  lastSt[o.id]=o.status;
+ });
+}
+
+/* ---------- summary after the table is closed + save as image ---------- */
+function summaryRows(S){
+ const map=new Map();
+ Object.values(S.orders||{}).filter(o=>!o.cancelled).sort((a,b)=>a.created-b.created).forEach(o=>(o.lines||[]).forEach(l=>{
+  if(l.x)return;const k=l.id+'|'+(l.price||0);const r=map.get(k)||{id:l.id,price:l.price||0,qty:0};r.qty+=l.qty;map.set(k,r)}));
+ return [...map.values()].map(r=>({...r,amt:r.price*r.qty}));
+}
+function openSummary(){if(!SESS||SESS.open)return;$('#sumOver').hidden=false;document.body.style.overflow='hidden';renderSummary()}
+function closeSummary(){$('#sumOver').hidden=true;if($('#orderView').hidden&&$('#statusOver').hidden)document.body.style.overflow='';updateBar()}
+function renderSummary(){
+ const S=SESS,root=$('#sumOver');if(!S||S.open){root.hidden=true;return}
+ const rows=summaryRows(S),tot=rows.reduce((s,r)=>s+r.amt,0);
+ root.innerHTML=`<div class="wrap" style="max-width:520px"><header><h2>${t().sumTitle}</h2><button class="btn ghost" id="sumX">${t().close}</button></header>
+ <div class="ord"><div class="hd"><span class="no">${t().tableLbl} ${S.table}</span></div>
+ <p class="note" style="margin:6px 0 12px">${t().tIn}: ${fmtDT(S.openedAt)}<br>${t().tOut}: ${fmtDT(S.closedAt||Date.now())}</p>
+ <ul class="lines">${rows.length?rows.map(r=>`<li><span class="n">${r.qty} × ${itemName(r.id)}</span><span class="p">${money(r.amt)}</span></li>`).join(''):`<li><span class="m">${t().noMine}</span></li>`}</ul>
+ <div class="sum"><span>${t().total}</span><span>${money(tot)} ${t().baht}</span></div>
+ <p class="now-d" style="margin:18px 0 0;text-align:center">${t().thanks}</p></div>
+ <button class="btn" id="sumSave" style="width:100%">${t().saveImg}</button></div>`;
+ $('#sumX').onclick=closeSummary;$('#sumSave').onclick=saveReceipt;
+}
+function wrapText(g,text,maxW){const out=[];let cur='';for(const ch of text){if(g.measureText(cur+ch).width>maxW&&cur){out.push(cur);cur=ch}else cur+=ch}if(cur)out.push(cur);return out}
+async function makeReceipt(S){
+ const L=t(),W=720,pad=48,sc=2;
+ const rows=summaryRows(S),tot=rows.reduce((s,r)=>s+r.amt,0);
+ const F=(w,s)=>`${w} ${s}px 'Noto Sans Thai','Noto Sans JP',system-ui,sans-serif`;
+ try{await Promise.all([document.fonts.load(F(400,24),'กขค'),document.fonts.load(F(700,24),'กขค'),document.fonts.load(F(400,24),'あ漢')])}catch(e){}
+ const c=document.createElement('canvas');
+ const H=420+rows.length*54+230;
+ c.width=W*sc;c.height=H*sc;
+ const g=c.getContext('2d');g.scale(sc,sc);
+ g.fillStyle='#fff';g.fillRect(0,0,W,H);
+ g.fillStyle='#111';g.textBaseline='alphabetic';
+ g.textAlign='center';g.font=F(700,42);g.fillText('Murakami Ramen',W/2,96);
+ g.fillStyle='#777';g.font=F(400,22);g.fillText('村上ラーメン',W/2,132);
+ const line=(y,dash)=>{g.save();g.strokeStyle='#bbb';g.lineWidth=1.5;if(dash)g.setLineDash([6,6]);g.beginPath();g.moveTo(pad,y);g.lineTo(W-pad,y);g.stroke();g.restore()};
+ line(166);
+ g.textAlign='left';g.fillStyle='#111';g.font=F(700,36);g.fillText(`${L.tableLbl} ${S.table}`,pad,224);
+ g.font=F(400,24);g.fillStyle='#333';
+ g.fillText(`${L.tIn}: ${fmtDT(S.openedAt)}`,pad,272);
+ g.fillText(`${L.tOut}: ${fmtDT(S.closedAt||Date.now())}`,pad,310);
+ line(344,true);
+ let y=398;g.font=F(400,26);
+ rows.forEach(r=>{
+  const amt=money(r.amt);g.textAlign='right';g.fillStyle='#111';g.fillText(amt,W-pad,y);
+  const aw=g.measureText(amt).width;g.textAlign='left';
+  let name=`${r.qty} × ${itemName(r.id)}`;const maxW=W-2*pad-aw-24;
+  if(g.measureText(name).width>maxW){while(name.length>1&&g.measureText(name+'…').width>maxW)name=name.slice(0,-1);name+='…'}
+  g.fillText(name,pad,y);y+=54;
+ });
+ y+=-10;line(y,true);y+=58;
+ g.font=F(700,32);g.textAlign='left';g.fillText(L.total,pad,y);
+ g.textAlign='right';g.fillText(`${money(tot)} ${L.baht}`,W-pad,y);
+ y+=84;g.textAlign='center';g.font=F(700,30);g.fillText(L.thanks,W/2,y);
+ y+=44;g.font=F(400,20);g.fillStyle='#777';
+ wrapText(g,L.notReceipt,W-2*pad).forEach(s=>{g.fillText(s,W/2,y);y+=28});
+ return c;
+}
+async function saveReceipt(){
+ const S=SESS;if(!S)return;
+ try{
+  const c=await makeReceipt(S);
+  const blob=await new Promise(r=>c.toBlob(r,'image/png'));
+  if(!blob)throw new Error('no blob');
+  const name=`murakami-table${S.table}-${new Date(S.closedAt||Date.now()).toISOString().slice(0,10)}.png`;
+  const file=new File([blob],name,{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+   try{await navigator.share({files:[file],title:'Murakami Ramen'});return}catch(e){if(e&&e.name==='AbortError')return}
+  }
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  showImg(url);
+ }catch(e){console.error(e);toast(t().saveFail)}
+}
+function showImg(url){$('#imgOver').innerHTML=`<div class="sheet" style="text-align:center"><p class="sub">${t().holdSave}</p><img src="${url}" alt="" style="max-width:100%;border:1px solid var(--line2)"><button class="btn" id="imgX">${t().close}</button></div>`;$('#imgOver').hidden=false;$('#imgX').onclick=closeImg}
+function closeImg(){$('#imgOver').hidden=true;$('#imgOver').innerHTML=''}
+
+/* ---------- admin ---------- */
+const NTABLES=20;
+const NEXT=['รับออเดอร์','เริ่มปรุง','พร้อมเสิร์ฟ','เสิร์ฟแล้ว'];
+const STTH=T.th.st;
+let adminTab='floor',aSig='',known=new Set(),knownC=new Set(),actx=null,cancelArm=null;
+let panelSid=null,panelAt=0,panelSeen=false,panelMode='main',staffDraft={},closeArm=null;
+const tableSess=n=>OPENS.find(s=>+s.table===n);
+const adminOrders=()=>OPENS.flatMap(s=>Object.entries(s.orders||{}).map(([id,o])=>({...o,id,sid:s.sid,table:s.table})));
+const callKeys=()=>OPENS.flatMap(s=>[s.callStaff>0?`${s.sid}:s:${s.callStaff}`:null,s.callBill>0?`${s.sid}:b:${s.callBill}`:null]).filter(Boolean);
+function primeKnown(){known=new Set(adminOrders().map(o=>o.sid+o.id));knownC=new Set(callKeys())}
+function beep(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.frequency.value=880;g.gain.setValueAtTime(.2,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+.6);o.start();o.stop(actx.currentTime+.6)}catch(e){}}
+const genSid=()=>Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>'abcdefghijkmnpqrstuvwxyz23456789'[b%32]).join('');
+const tableUrl=sid=>location.href.split('#')[0]+'#s='+sid;
+const errTxt=e=>e&&e.code?' ('+e.code+')':'';
+const upd=(sid,f)=>db.collection('sessions').doc(sid).update(f).catch(e=>{console.error(e);toast('บันทึกไม่สำเร็จ'+errTxt(e))});
+
+function openAdmin(){
+ const r=$('#adminOver');r.hidden=false;document.body.style.overflow='hidden';
+ if(!isAdmin()){
+  r.innerHTML=`<div class="wrap"><div class="login" id="lf"><div class="logo" style="margin-bottom:18px"><span class="seal">村</span><span>Admin</span></div>
+  <label class="fld" for="em">อีเมล</label><input id="em" type="email" autocomplete="username"><label class="fld" for="pw">รหัสผ่าน</label><input id="pw" type="password" autocomplete="current-password" autofocus><p class="err" id="er"></p>
+  <button type="button" class="btn" id="lb" style="width:100%">เข้าสู่ระบบ</button>  <p><button type="button" class="btn ghost" id="lx" style="width:100%">กลับหน้าร้าน</button></p></div></div>`;
+  $('#lx').onclick=closeAdmin;
+  const doLogin=async()=>{
+   if(!auth){$('#er').textContent='เชื่อมต่อ Firebase ไม่ได้';return}
+   $('#er').textContent='';
+   try{
+    const c=await auth.signInWithEmailAndPassword($('#em').value.trim(),$('#pw').value);
+    if(c.user.uid!==ADMIN_UID){await auth.signOut();$('#er').textContent='บัญชีนี้ไม่มีสิทธิ์แอดมิน';return}
+    beep();openAdmin();
+   }catch(e){$('#er').textContent='อีเมลหรือรหัสผ่านไม่ถูกต้อง'}
+  };
+  $('#lb').onclick=doLogin;$('#pw').onkeydown=e=>{if(e.key==='Enter')doLogin()};
+  return;
+ }
+ primeKnown();aSig='';renderAdmin();
+}
+function closeAdmin(){closePanel();$('#adminOver').hidden=true;document.body.style.overflow='';if(location.hash==='#admin'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){try{location.hash=''}catch(x){}}}}
+
+async function openTable(n){
+ const sid=genSid();
+ try{
+  await db.runTransaction(async tx=>{
+   const tr=db.collection('tables').doc(String(n)),sn=await tx.get(tr);
+   if(sn.exists&&sn.data().open)throw new Error('already');
+   tx.set(db.collection('sessions').doc(sid),{table:n,open:true,openedAt:Date.now(),callStaff:0,callBill:0,orders:{}});
+   tx.set(tr,{open:true,sid,openedAt:Date.now()});
+  });
+  openPanel(sid);
+ }catch(e){console.error(e);toast(e.message==='already'?'โต๊ะนี้เปิดอยู่แล้ว':'เปิดโต๊ะไม่สำเร็จ'+errTxt(e))}
+}
+async function closeTable(sid){
+ const s=OPENS.find(x=>x.sid===sid);if(!s)return;
+ try{
+  const bt=db.batch();
+  bt.update(db.collection('sessions').doc(sid),{open:false,closedAt:Date.now(),callStaff:0,callBill:0});
+  bt.set(db.collection('tables').doc(String(s.table)),{open:false,sid:null});
+  await Promise.race([bt.commit(),new Promise((_,j)=>setTimeout(()=>j({code:'timeout'}),10000))]);
+  closePanel();renderAdmin();toast('ปิดโต๊ะแล้ว');
+ }catch(e){console.error(e);toast('ปิดโต๊ะไม่สำเร็จ'+errTxt(e))}
+}
+async function moveTable(sid,to){
+ const s=OPENS.find(x=>x.sid===sid);if(!s||+s.table===to)return;
+ try{
+  await db.runTransaction(async tx=>{
+   const a=db.collection('tables').doc(String(s.table)),b=db.collection('tables').doc(String(to)),bs=await tx.get(b);
+   if(bs.exists&&bs.data().open)throw new Error('taken');
+   tx.update(db.collection('sessions').doc(sid),{table:to});
+   tx.set(a,{open:false,sid:null});tx.set(b,{open:true,sid,openedAt:s.openedAt});
+  });
+  panelMode='main';aSig='';toast('ย้ายไปโต๊ะ '+to+' แล้ว');
+ }catch(e){console.error(e);toast(e.message==='taken'?'โต๊ะปลายทางไม่ว่าง':'ย้ายโต๊ะไม่สำเร็จ'+errTxt(e))}
+}
+function lineEdit(sid,oid,idx,mode){
+ const s=OPENS.find(x=>x.sid===sid),o=s&&s.orders[oid];if(!o)return;
+ const lines=o.lines.map(l=>({...l})),l=lines[idx];if(!l)return;
+ if(mode==='dec'&&l.qty>1)l.qty-=1;else l.x=true;
+ const f={['orders.'+oid+'.lines']:lines,['orders.'+oid+'.total']:lines.reduce((a,x)=>a+lineAmt(x),0)};
+ if(lines.every(x=>x.x))f['orders.'+oid+'.cancelled']=true;
+ upd(sid,f);
+}
+function staffOrderSend(sid){
+ const lines=Object.entries(staffDraft).filter(([id,q])=>q>0).map(([id,q])=>({id,qty:q,note:'',price:MENU.find(m=>m.id===id).price}));
+ if(!lines.length)return;
+ const oid='o'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+ const o={no:'S'+Date.now().toString(36).slice(-4).toUpperCase(),uid:myUid,by:'staff',lines,total:lines.reduce((s,l)=>s+l.price*l.qty,0),status:1,cancelled:false,created:Date.now()};
+ upd(sid,{['orders.'+oid]:o}).then(()=>{staffDraft={};panelMode='main';aSig='';renderAdmin();toast('บันทึกออเดอร์แล้ว')});
+}
+
+function floorHtml(){
+ let h='<div class="floor">';
+ for(let n=1;n<=NTABLES;n++){
+  const s=tableSess(n);
+  if(!s){h+=`<button class="tb off" data-a="topen" data-n="${n}"><b>${n}</b><span>ว่าง</span></button>`;continue}
+  const nw=Object.values(s.orders||{}).filter(o=>o.status===0&&!o.cancelled).length;
+  h+=`<button class="tb on" data-a="tdetail" data-sid="${s.sid}"><div class="bd">${s.callStaff>0?'<i class="b1">เรียก</i>':''}${s.callBill>0?'<i class="b2">เช็กบิล</i>':''}${nw?`<i class="b3">ใหม่ ${nw}</i>`:''}</div><b>${n}</b><span>${durTxt(Date.now()-s.openedAt)}</span><span>${money(sessTotal(s))} ฿</span></button>`;
+ }
+ return h+'</div><p class="note">เขียว = มีลูกค้า (เปิดโต๊ะ) · แดง = ว่าง (ปิดโต๊ะ) · กดโต๊ะแดงเพื่อเปิดและสร้าง QR</p>';
+}
+function menuTabHtml(){
+ return ['ramen','drink','snack'].map(c=>`<h3 class="mh">${T.th.cat[c]}</h3><div class="mgrid">${MENU.filter(m=>m.cat===c).map(m=>{const o=isOut(m.id);return `<button class="mi ${o?'out':'in'}" data-a="mtoggle" data-id="${m.id}"><span class="nm">${m.nm.th}</span><span class="st">${o?'หมด':'มี'}</span></button>`}).join('')}</div>`).join('')+'<p class="note">เมนูที่หมดจะรีเซ็ตกลับเป็น "มี" อัตโนมัติทุกวันตอน 11:00 น.</p>';
+}
+async function toggleMenu(id){
+ const out={...outMap()};if(out[id])delete out[id];else out[id]=true;
+ try{await db.collection('menu').doc('status').set({out,key:svcKey()})}catch(e){console.error(e);toast('บันทึกไม่สำเร็จ')}
+}
+function histHtml(){
+ const c=CLOSEDS.map(s=>{const rows=summaryRows(s);return `<article class="a-ord"><div class="a-hd"><span class="a-tb">โต๊ะ ${s.table}</span><span class="a-st">${fmtDT(s.openedAt)} – ${fmtT(s.closedAt)}</span></div>
+  <ul class="a-it">${rows.length?rows.map(r=>`<li><b>${r.qty} ×</b> ${itemName(r.id,'th')}<span style="float:right">${money(r.amt)}</span></li>`).join(''):'<li>ไม่มีรายการ</li>'}</ul><div style="color:var(--mute)">รวม ${money(rows.reduce((a,r)=>a+r.amt,0))} บาท</div></article>`}).join('');
+ const leg=LEGACY.slice().sort((a,b)=>b.created-a.created).slice(0,50).map(o=>`<article class="a-ord"><div class="a-hd"><span class="a-tb">โต๊ะ ${o.table} <small style="font-size:14px;color:var(--mute)">${o.no||o.id}</small></span><span class="a-st">${o.cancelled?'ยกเลิก':STTH[STEPS[o.status]]} · ${fmtDT(o.created)}</span></div>
+  <ul class="a-it">${o.lines.map(l=>`<li><b>${l.qty} ×</b> ${itemName(l.id,'th')}</li>`).join('')}</ul><div style="color:var(--mute)">รวม ${money(o.total)} บาท</div></article>`).join('');
+ return (c||'<p class="note">ยังไม่มีรอบที่ปิดแล้ว</p>')+(leg?'<h3 class="mh">ก่อนใช้ระบบรอบ</h3>'+leg:'');
+}
+function ordersHtml(){
+ const act=adminOrders().filter(o=>o.status<4&&!o.cancelled).sort((a,b)=>b.created-a.created);
+ const ago=o=>{const m=Math.floor((Date.now()-o.created)/60000);return m<1?'เมื่อสักครู่':m+' นาทีที่แล้ว'};
+ return act.length?act.map(o=>`<article class="a-ord ${o.status===0?'new':''}"><div class="a-hd"><span class="a-tb">โต๊ะ ${o.table} <small style="font-size:14px;color:var(--mute)">${o.no||o.id}</small></span><span class="a-st">${STTH[STEPS[o.status]]} · ${ago(o)}</span></div>
+ <ul class="a-it">${o.lines.filter(l=>!l.x).map(l=>`<li><b>${l.qty} ×</b> ${itemName(l.id,'th')}${l.note?`<small>${esc(l.note)}</small>`:''}</li>`).join('')}</ul>
+ <div class="a-act"><button class="btn" data-a="next" data-sid="${o.sid}" data-id="${o.id}">${NEXT[o.status]} →</button>${o.status>0?`<button class="btn ghost" data-a="prev" data-sid="${o.sid}" data-id="${o.id}">ย้อนสถานะ</button>`:''}<button class="btn ghost" data-a="cancel" data-sid="${o.sid}" data-id="${o.id}">${cancelArm===o.sid+o.id?'กดอีกครั้งเพื่อยืนยันยกเลิก':'ยกเลิก'}</button></div></article>`).join(''):'<p class="note">ไม่มีออเดอร์ที่กำลังทำ</p>';
+}
+const panelKey=()=>[panelSid,panelMode,JSON.stringify(staffDraft),closeArm].join('|');
+function renderAdmin(){
+ const r=$('#adminOver');if(r.hidden||!isAdmin())return;
+ const fresh=adminOrders().filter(o=>!known.has(o.sid+o.id));if(fresh.length){if(fresh.some(o=>o.status===0&&o.by!=='staff'))beep();fresh.forEach(o=>known.add(o.sid+o.id))}
+ const fc=callKeys().filter(k=>!knownC.has(k));if(fc.length){beep();fc.forEach(k=>knownC.add(k))}
+ const sig=adminTab+JSON.stringify(OPENS)+(adminTab==='history'?JSON.stringify(CLOSEDS)+LEGACY.length:'')+(adminTab==='menu'?JSON.stringify(MSTAT)+svcKey():'')+cancelArm+panelKey()+Math.floor(Date.now()/60000)+(panelSid&&!OPENS.some(x=>x.sid===panelSid)?'w'+Math.floor(Date.now()/1000):'');
+ if(sig===aSig)return;aSig=sig;
+ const sc=r.scrollTop;
+ const newO=adminOrders().filter(o=>o.status===0&&!o.cancelled).length;
+ const body=adminTab==='floor'?floorHtml():adminTab==='orders'?ordersHtml():adminTab==='menu'?menuTabHtml():histHtml();
+ r.innerHTML=`<div class="wrap"><header><h2>จัดการร้าน</h2><div class="row"><button class="btn ghost" id="al">ออกจากระบบ</button><button class="btn ghost" id="ax">กลับหน้าร้าน</button></div></header>
+ <div class="tabs"><button data-tab="floor" aria-pressed="${adminTab==='floor'}">โต๊ะ (${OPENS.length})</button><button data-tab="orders" aria-pressed="${adminTab==='orders'}">ออเดอร์${newO?' ('+newO+')':''}</button><button data-tab="menu" aria-pressed="${adminTab==='menu'}">เมนู</button><button data-tab="history" aria-pressed="${adminTab==='history'}">ประวัติ</button></div>${body}</div>`;
+ r.scrollTop=sc;
+ $('#ax').onclick=closeAdmin;
+ $('#al').onclick=()=>{auth.signOut().then(()=>openAdmin())};
+ r.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{adminTab=b.dataset.tab;aSig='';renderAdmin()});
+ bindActs(r);
+ renderPanel();
+}
+function openPanel(sid){panelSid=sid;panelAt=Date.now();panelSeen=false;panelMode='main';staffDraft={};closeArm=null;aSig='';renderAdmin()}
+function closePanel(){panelSid=null;closeArm=null;panelMode='main';staffDraft={};$('#tblPanel').hidden=true;aSig=''}
+function renderPanel(){
+ const P=$('#tblPanel'),sh=$('#tblSheet');
+ if(!panelSid){P.hidden=true;return}
+ const s=OPENS.find(x=>x.sid===panelSid);
+ if(s)panelSeen=true;
+ if(!s){if(!panelSeen&&Date.now()-panelAt<6000){P.hidden=false;sh.innerHTML='<p class="sub">กำลังโหลด…</p>';return}closePanel();return}
+ P.hidden=false;
+ const head=`<h3>โต๊ะ ${s.table} <small style="font-size:14px;color:var(--mute)">เปิด ${fmtT(s.openedAt)} · ${durTxt(Date.now()-s.openedAt)}</small></h3>`;
+ if(panelMode==='move'){
+  const free=Array.from({length:NTABLES},(_,i)=>i+1).filter(n=>!tableSess(n));
+  sh.innerHTML=head+`<p class="sub">เลือกโต๊ะปลายทาง (ออเดอร์และ QR เดิมจะตามไปด้วย)</p><div class="floor">${free.map(n=>`<button class="tb off" data-a="pmoveto" data-n="${n}"><b>${n}</b><span>ว่าง</span></button>`).join('')||'<p class="note">ไม่มีโต๊ะว่าง</p>'}</div><div class="a-act" style="margin-top:16px"><button class="btn ghost" data-a="pback">กลับ</button></div>`;
+  bindActs(sh);return;
+ }
+ if(panelMode==='order'){
+  const cnt=Object.values(staffDraft).reduce((a,b)=>a+b,0);
+  sh.innerHTML=head+`<p class="sub">สั่งแทนลูกค้า (ออเดอร์จะอยู่สถานะ "รับออเดอร์แล้ว")</p><ul class="lines">${MENU.map(m=>{const q=staffDraft[m.id]||0,o=isOut(m.id);return `<li><span class="n">${m.nm.th}${o?' <span style="color:var(--red-hi)">(หมด)</span>':''}</span><span class="p">${money(m.price)}</span><span class="m"></span><span style="grid-column:2;text-align:right"><button class="sm" data-a="pq" data-id="${m.id}" data-d="-1" ${q?'':'disabled'}>−</button> <b>${q}</b> <button class="sm" data-a="pq" data-id="${m.id}" data-d="1" ${o?'disabled':''}>+</button></span></li>`}).join('')}</ul>
+  <div class="a-act" style="margin-top:16px"><button class="btn" data-a="psend" ${cnt?'':'disabled'}>บันทึกออเดอร์ (${cnt})</button><button class="btn ghost" data-a="pback">กลับ</button></div>`;
+  bindActs(sh);return;
+ }
+ const os=Object.entries(s.orders||{}).map(([id,o])=>({...o,id})).sort((a,b)=>a.created-b.created);
+ const unserved=os.filter(o=>!o.cancelled&&o.status<4).length;
+ const calls=(s.callStaff>0?`<div class="a-act" style="margin-bottom:8px"><button class="btn" data-a="ackS" data-sid="${s.sid}">รับทราบ: เรียกพนักงาน</button></div>`:'')+(s.callBill>0?`<div class="a-act" style="margin-bottom:8px"><button class="btn" data-a="ackB" data-sid="${s.sid}">รับทราบ: ขอเช็กบิล</button></div>`:'');
+ sh.innerHTML=head+calls+`<div class="qrbox" id="qrBox"></div><p class="note" style="overflow-wrap:anywhere;margin:0">${esc(tableUrl(s.sid))}</p>
+ <div class="a-act" style="margin-top:10px"><button class="btn ghost" data-a="pcopy">คัดลอกลิงก์</button><button class="btn ghost" data-a="ptry">ทดลองสั่งเป็นลูกค้า</button></div>
+ <h3 class="mh" style="margin-top:22px">ออเดอร์ของโต๊ะนี้</h3>
+ ${os.length?os.map(o=>`<div class="a-ord" style="padding:12px"><div class="a-hd"><span><b>${o.no}</b>${o.by==='staff'?' (พนักงาน)':''}</span><span class="a-st">${o.cancelled?'ยกเลิก':STTH[STEPS[o.status]]} · ${fmtT(o.created)}</span></div>
+  <ul class="a-it">${o.lines.map((l,i)=>`<li>${l.x?`<s style="opacity:.55"><b>${l.qty} ×</b> ${itemName(l.id,'th')}</s> ยกเลิก`:`<b>${l.qty} ×</b> ${itemName(l.id,'th')}<span style="float:right">${money(lineAmt(l))}${o.cancelled?'':` <button class="sm" data-a="ldec" data-sid="${s.sid}" data-id="${o.id}" data-i="${i}" ${l.qty>1?'':'disabled'}>−1</button><button class="sm" data-a="lvoid" data-sid="${s.sid}" data-id="${o.id}" data-i="${i}">ยกเลิก</button>`}</span>`}${l.note?`<small>${esc(l.note)}</small>`:''}</li>`).join('')}</ul></div>`).join(''):'<p class="note">ยังไม่มีออเดอร์</p>'}
+ <div class="sum"><span>ยอดรวม</span><span>${money(sessTotal(s))} บาท</span></div>
+ <div class="a-act" style="margin-top:16px"><button class="btn ghost" data-a="porder">สั่งแทนลูกค้า</button><button class="btn ghost" data-a="pmove">ย้ายโต๊ะ</button></div>
+ <div class="a-act" style="margin-top:10px"><button class="btn" data-a="pclosetable" data-sid="${s.sid}">${closeArm===s.sid?(unserved?`ยังมี ${unserved} ออเดอร์ไม่เสิร์ฟ · กดอีกครั้งเพื่อปิดโต๊ะ`:'กดอีกครั้งเพื่อยืนยันปิดโต๊ะ'):'ปิดโต๊ะ'}</button><button class="btn ghost" data-a="pclose">ปิดหน้าต่าง</button></div>`;
+ try{new QRCode($('#qrBox'),{text:tableUrl(s.sid),width:240,height:240,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})}
+ catch(e){$('#qrBox').textContent='สร้าง QR ไม่ได้ ใช้ลิงก์ด้านล่างแทน'}
+ bindActs(sh);
+}
+function bindActs(root){root.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>doAct(b))}
+function doAct(b){
+ const a=b.dataset.a,sid=b.dataset.sid,id=b.dataset.id;
+ if(a==='topen')return openTable(+b.dataset.n);
+ if(a==='tdetail')return openPanel(sid);
+ if(a==='mtoggle')return toggleMenu(id);
+ if(a==='next'){const o=adminOrders().find(x=>x.sid===sid&&x.id===id);if(o)upd(sid,{['orders.'+id+'.status']:Math.min(4,o.status+1)});return}
+ if(a==='prev'){const o=adminOrders().find(x=>x.sid===sid&&x.id===id);if(o)upd(sid,{['orders.'+id+'.status']:Math.max(0,o.status-1)});return}
+ if(a==='cancel'){const k=sid+id;if(cancelArm===k){cancelArm=null;upd(sid,{['orders.'+id+'.cancelled']:true})}else{cancelArm=k;aSig='';renderAdmin()}return}
+ if(a==='ackS')return upd(sid,{callStaff:0});
+ if(a==='ackB')return upd(sid,{callBill:0});
+ if(a==='ldec')return lineEdit(sid,id,+b.dataset.i,'dec');
+ if(a==='lvoid')return lineEdit(sid,id,+b.dataset.i,'void');
+ if(a==='pclose')return closePanel();
+ if(a==='pback'){panelMode='main';aSig='';return renderAdmin()}
+ if(a==='pmove'){panelMode='move';aSig='';return renderAdmin()}
+ if(a==='pmoveto')return moveTable(panelSid,+b.dataset.n);
+ if(a==='porder'){panelMode='order';staffDraft={};aSig='';return renderAdmin()}
+ if(a==='pq'){const q=Math.max(0,Math.min(20,(staffDraft[id]||0)+(+b.dataset.d)));if(q)staffDraft[id]=q;else delete staffDraft[id];aSig='';return renderAdmin()}
+ if(a==='psend')return staffOrderSend(panelSid);
+ if(a==='pcopy'){const u=tableUrl(panelSid);if(navigator.clipboard)navigator.clipboard.writeText(u).then(()=>toast('คัดลอกลิงก์แล้ว'),()=>toast(u));else toast(u);return}
+ if(a==='ptry'){const sid2=panelSid;closePanel();closeAdmin();SESS=null;setSid(sid2);watchSession();openOrderView();return}
+ if(a==='pclosetable'){if(closeArm===sid){closeArm=null;closeTable(sid)}else{closeArm=sid;aSig='';renderAdmin()}return}
+}
+
+/* ---------- routing, secret entrance, polling ---------- */
+function route(){
+ const h=location.hash.slice(1);
+ const m=/^s=([a-z0-9]{12,40})$/i.exec(h);
+ if(m){
+  const sid=m[1];
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  if(sid!==SID){SESS=null;wasOpen=false;setSid(sid);cart=[];closeSummary();closeStatus();watchSession()}
+  openOrderView();
+  return;
+ }
+ if(h==='admin')openAdmin();else if($('#adminOver').hidden===false&&h!=='admin')closeAdmin();
+}
+addEventListener('hashchange',route);
+let pressT;const lg=$('#secretLogo');
+['pointerdown'].forEach(e=>lg.addEventListener(e,()=>{pressT=setTimeout(()=>{location.hash='admin'},900)}));
+['pointerup','pointerleave','pointercancel'].forEach(e=>lg.addEventListener(e,()=>clearTimeout(pressT)));
+setInterval(()=>{renderAdmin();if(!$('#statusOver').hidden)renderStatus(false);updateBar();updateOpen()},1000);
+$('#seeMenu').onclick=()=>$('#menu').scrollIntoView({behavior:'smooth'});
+applyLang();route();
+</script>
+
+</body></html>
